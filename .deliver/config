@@ -2,7 +2,7 @@ APP="deploy_example"
 
 BUILD_HOST="206.189.40.216"
 BUILD_USER="deploy"
-BUILT_AT="/home/deploy/deploy_example/builds"
+BUILD_AT="/home/deploy/deploy_example/builds"
 
 PRODUCTION_HOST="206.189.40.216"
 PRODUCTION_USER="deploy"
