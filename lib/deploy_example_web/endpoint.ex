@@ -3,20 +3,33 @@ defmodule DeployExampleWeb.Endpoint do
 
   def init(_key, config) do
     if config[:load_from_system_env] do
-      port = System.fetch_env!("PORT")
-      secret_key_base = System.fetch_env!("SECRET_KEY_BASE")
-      app_host = System.fetch_env!("APP_HOST")
+      port = System.get_env("PORT") ||
+        raise("expected the PORT environment variable to be set")
+
+      secret_key_base =
+        System.get_env("SECRET_KEY_BASE") ||
+          raise("expected the SECRET_KEY_BASE environment variable to be set")
+
+      app_host =
+        System.get_env("APP_DOMAIN") ||
+          raise("expected the APP_DOMAIN environment variable to be set")
+
       config =
         config
-        |> Keyword.put(:http, [:inet6, port: port])
+        |> Keyword.put(:http, [port: port, transport_options: [socket_opts: [:inet6]]])
         |> Keyword.put(:secret_key_base, secret_key_base)
         |> Keyword.put(:url, host: app_host, scheme: "https", port: 443)
-​​​​​​​
+
+  # http: [
+  #   port: String.to_integer(System.get_env("PORT") || "4000"),
+  #   transport_options: [socket_opts: [:inet6]]
+  # ],
       {:ok, config}
     else
       {:ok, config}
     end
   end
+
 
 
   socket "/socket", DeployExampleWeb.UserSocket,
